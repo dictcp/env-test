@@ -1,0 +1,38 @@
+version: '2'
+services:
+  rabbitmq:
+    image: rabbitmq:3.7
+  mongo:
+    image: bitnami/mongodb:3.6
+    environment:
+    - MONGODB_USERNAME=my_user
+    - MONGODB_PASSWORD=password123
+    - MONGODB_DATABASE=my_database
+  memcached:
+    image: memcached:1.5
+  redis:
+    image: redis:4.0
+  mysql:
+    image: mysql:5.7
+    environment:
+    - MYSQL_USER=user
+    - MYSQL_PASSWORD=somepassword
+    - MYSQL_DATABASE=somedb
+    - MYSQL_ROOT_PASSWORD=somepassword
+  sut:
+    build: .
+    depends_on:
+    - rabbitmq
+    - mongo
+    - memcached
+    - redis
+    - mysql
+    environment:
+    - MYSQL_HOST=mysql
+    - MYSQL_USER=user
+    - MYSQL_PASSWORD=somepassword
+    - MYSQL_DATABASE=somedb
+    - MONGO_URI=mongodb://my_user:password123@mongo:27017/my_database
+    - REDIS_HOST=redis
+    - MEMCACHE_HOST=memcached
+    - WAIT_SLEEP=20
